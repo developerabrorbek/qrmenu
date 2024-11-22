@@ -38,6 +38,7 @@ import {
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
+      global: true,
       useFactory: async (configService: ConfigService) => ({
         global: true,
         secret: configService.get<string>('jwt.accessKey'),

@@ -10,6 +10,12 @@ export class Category {
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Restaurant' })
   restaurant: string;
+
+  @Prop({ type: SchemaTypes.String })
+  image: string;
+
+  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Food' }] })
+  foods: string[];
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

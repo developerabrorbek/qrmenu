@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false,
+    // logger: false,
   });
 
   app.setGlobalPrefix('/api/v1');
@@ -17,18 +17,18 @@ async function bootstrap() {
   const seeds = app.get(SeedsService);
   await seeds.seedAll();
 
+  const config = app.get(ConfigService);
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle('QRmenu')
     .setDescription('The qrmenu API description')
     .setVersion('1.0')
     .addBearerAuth()
-    .addServer('http://localhost:3000', 'localhost')
+    .addServer(`http://localhost:${config.get<number>('app.port')}`, config.get<string>('app.host'))
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentFactory);
-
-  const config = app.get(ConfigService);
 
   await app.listen(config.get<number>('app.port'), (): void => {
     console.log(`listening on port ${config.get<number>('app.port')}`);

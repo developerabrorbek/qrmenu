@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Category } from './models';
+import { Restaurant } from '../restaurant';
 
 @Injectable()
 export class CategoryService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @InjectModel(Restaurant.name) private restaurantModel: Model<Restaurant>,
+  ) {}
+
+  async create(payload: CreateCategoryDto) {
+    await this.#_checkRestaurant(payload.restaurantId);
+
+    const category = await this.categoryModel.create({
+      image: payload.image,
+      name: payload.name,
+      restaurant: payload.restaurantId,
+    });
+
+    return category;
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll(restaurantId: string) {
+    const categories = await this.categoryModel
+      .find({ restaurant: restaurantId })
+      .populate(['foods']);
+    return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const category = await this.categoryModel.findById(id).populate(['foods']);
+    return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, payload: UpdateCategoryDto) {
+    const category = await this.categoryModel.updateOne(
+      { id },
+      { image: payload.image, name: payload.name },
+    );
+    return category;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const category = await this.categoryModel.deleteOne({ id });
+    return category;
+  }
+
+  async #_checkRestaurant(id: string) {
+    const restaurant = await this.restaurantModel.findById(id);
+    if (!restaurant) {
+      throw new NotFoundException('Restaurant not found');
+    }
   }
 }
