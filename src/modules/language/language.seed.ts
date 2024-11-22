@@ -17,10 +17,10 @@ export class LanguageSeed {
     }
 
     const languages: Language[] = [
-      { name: 'English', code: 'en', image: 'public/united-kingdom.png' },
-      { name: "O'zbek", code: 'uz', image: 'public/uzbekistan.png' },
-      { name: 'Türkçe', code: 'tr', image: 'public/turkey.png' },
-      { name: 'Русский', code: 'ru', image: 'public/russia.png' },
+      { name: 'English', code: 'en', image: 'public/static/united-kingdom.png' },
+      { name: "O'zbek", code: 'uz', image: 'public/static/uzbekistan.png' },
+      { name: 'Türkçe', code: 'tr', image: 'public/static/turkey.png' },
+      { name: 'Русский', code: 'ru', image: 'public/static/russia.png' },
     ];
 
     await this.languageModel.insertMany(languages);
