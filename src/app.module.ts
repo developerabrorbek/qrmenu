@@ -3,7 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { appConfig, databaseConfig, jwtConfig } from '@config';
-import { AuthModule, CategoryModule, FoodModule, RestaurantModule, UserModule } from '@modules';
+import {
+  AuthModule,
+  CategoryModule,
+  FoodModule,
+  RestaurantModule,
+  UserModule,
+  LanguageModule,
+} from '@modules';
 
 @Module({
   imports: [
@@ -32,6 +39,7 @@ import { AuthModule, CategoryModule, FoodModule, RestaurantModule, UserModule } 
     FoodModule,
     CategoryModule,
     RestaurantModule,
+    LanguageModule,
   ],
 })
 export class AppModule {}
