@@ -1,8 +1,13 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { appConfig, databaseConfig, jwtConfig } from '@config';
+import { CheckAuthGuard, CheckRoleGuard } from '@guards';
+import { ExceptionHandlerFilter } from '@filters';
 import {
   AuthModule,
   CategoryModule,
@@ -13,8 +18,6 @@ import {
   SeedsModule,
   UploadModule,
 } from '@modules';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
@@ -50,6 +53,20 @@ import { join } from 'path';
     LanguageModule,
     SeedsModule,
     UploadModule,
+  ],
+  providers: [
+    {
+      useClass: CheckAuthGuard,
+      provide: APP_GUARD,
+    },
+    {
+      useClass: CheckRoleGuard,
+      provide: APP_GUARD,
+    },
+    {
+      useClass: ExceptionHandlerFilter,
+      provide: APP_FILTER,
+    },
   ],
 })
 export class AppModule {}
