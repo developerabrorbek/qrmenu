@@ -1,8 +1,9 @@
-import { appConfig, databaseConfig, jwtConfig } from '@config';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { appConfig, databaseConfig, jwtConfig } from '@config';
+import { AuthModule, CategoryModule, FoodModule, RestaurantModule, UserModule } from '@modules';
 
 @Module({
   imports: [
@@ -26,6 +27,11 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
+    UserModule,
+    FoodModule,
+    CategoryModule,
+    RestaurantModule,
   ],
 })
 export class AppModule {}
