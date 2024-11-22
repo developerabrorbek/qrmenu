@@ -10,10 +10,17 @@ import {
   RestaurantModule,
   UserModule,
   LanguageModule,
+  SeedsModule,
 } from '@modules';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, databaseConfig, jwtConfig],
@@ -40,6 +47,7 @@ import {
     CategoryModule,
     RestaurantModule,
     LanguageModule,
+    SeedsModule,
   ],
 })
 export class AppModule {}

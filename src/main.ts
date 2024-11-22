@@ -2,11 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { SeedsService } from '@modules';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+  });
 
   app.setGlobalPrefix('/api/v1');
+
+  const seeds = app.get(SeedsService);
+  await seeds.seedAll();
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('QRmenu')
