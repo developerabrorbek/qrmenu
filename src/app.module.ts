@@ -11,6 +11,7 @@ import {
   UserModule,
   LanguageModule,
   SeedsModule,
+  UploadModule,
 } from '@modules';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -48,6 +49,7 @@ import { join } from 'path';
     RestaurantModule,
     LanguageModule,
     SeedsModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
