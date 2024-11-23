@@ -8,7 +8,13 @@ export class Language {
   @Prop({ type: SchemaTypes.String, required: true })
   name: string;
 
-  @Prop({ type: SchemaTypes.String, maxlength: 2, minlength: 2, required: true })
+  @Prop({
+    type: SchemaTypes.String,
+    maxlength: 2,
+    minlength: 2,
+    required: true,
+    unique: true,
+  })
   code: string;
 
   @Prop({ type: SchemaTypes.String })

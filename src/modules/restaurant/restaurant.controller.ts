@@ -6,18 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { RestaurantService } from './restaurant.service';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
-import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import {
   ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '@pipes';
 import { Protected, Roles } from '@decorators';
+import { RestaurantService } from './restaurant.service';
+import { CreateRestaurantDto, UpdateRestaurantDto } from './dto';
 import { UserRoles } from '../user';
 
 @ApiTags('Restaurant')
@@ -30,9 +32,13 @@ export class RestaurantController {
   @Roles([UserRoles.SUPER_ADMIN])
   @ApiOperation({ summary: 'Yangi restoran yaratish' })
   @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
   @Post()
-  create(@Body() createRestaurantDto: CreateRestaurantDto) {
-    return this.restaurantService.create(createRestaurantDto);
+  create(
+    @Body() createRestaurantDto: CreateRestaurantDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.restaurantService.create({ ...createRestaurantDto, image });
   }
 
   @Protected(false)
@@ -56,12 +62,14 @@ export class RestaurantController {
   @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN])
   @ApiOperation({ summary: 'Restoranni tahrirlash' })
   @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
   @Patch(':id')
   update(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() updateRestaurantDto: UpdateRestaurantDto,
+    @UploadedFile() image: Express.Multer.File,
   ) {
-    return this.restaurantService.update(id, updateRestaurantDto);
+    return this.restaurantService.update(id, { ...updateRestaurantDto, image });
   }
 
   @ApiBearerAuth()

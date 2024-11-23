@@ -12,7 +12,7 @@ export class CreateRestaurantDto {
 
   @ApiProperty({
     type: 'string',
-    required: true,
+    required: false,
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
   @IsString()
