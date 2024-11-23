@@ -53,14 +53,14 @@ export class UserService {
   }
 
   async update(id: string, payload: UpdateUserDto) {
-    const user = await this.userModel.findById(id)
+    const user = await this.userModel.findById(id);
 
-    if(!user) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    if(payload?.image) {
-      if(user?.image) {
+    if (payload?.image) {
+      if (user?.image) {
         await this.uplaodService.removeFile({
           fileName: user.image,
         });
@@ -71,28 +71,34 @@ export class UserService {
         file: payload.image,
       });
 
-      return await this.userModel.updateOne({ id }, {
-        name: payload.name,
-        phone: payload.phone,
-        password: payload.password,
-        username: payload.username,
-        image: image.imageUrl,
-      });
+      return await this.userModel.updateOne(
+        { id },
+        {
+          name: payload.name,
+          phone: payload.phone,
+          password: payload.password,
+          username: payload.username,
+          image: image.imageUrl,
+        },
+      );
     }
 
-    const newUser = await this.userModel.updateOne({ id }, {
-      name: payload?.name,
-      phone: payload?.phone,
-      password: payload?.password,
-      username: payload?.username,
-    });
+    const newUser = await this.userModel.updateOne(
+      { id },
+      {
+        name: payload?.name,
+        phone: payload?.phone,
+        password: payload?.password,
+        username: payload?.username,
+      },
+    );
     return newUser;
   }
 
   async remove(id: string) {
     const user = await this.userModel.findById(id);
 
-    if(!user) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -102,7 +108,7 @@ export class UserService {
       });
     }
 
-    await this.userModel.deleteOne({ id });
+    await this.userModel.deleteOne({ _id: id });
     return user;
   }
 }

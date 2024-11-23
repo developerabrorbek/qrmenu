@@ -89,7 +89,7 @@ export class FoodService {
       await this.uploadService.removeFile({ fileName: food.image });
     }
 
-    await this.foodModel.deleteOne({ id });
+    await this.foodModel.deleteOne({ _id: id });
     return food;
   }
 

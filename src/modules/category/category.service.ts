@@ -55,7 +55,7 @@ export class CategoryService {
   }
 
   async remove(id: string) {
-    const category = await this.categoryModel.deleteOne({ id });
+    const category = await this.categoryModel.deleteOne({ _id: id });
     return category;
   }
 

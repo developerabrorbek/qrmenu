@@ -78,7 +78,7 @@ export class LanguageService {
       });
     }
 
-    await this.languageModel.deleteOne({ id });
+    await this.languageModel.deleteOne({ _id: id });
     return language;
   }
 }

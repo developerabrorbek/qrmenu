@@ -78,7 +78,7 @@ export class CategoryImageService {
 
     await this.uploadService.removeFile({ fileName: categoryImage.image });
 
-    await this.categoryImageModel.deleteOne({ id });
+    await this.categoryImageModel.deleteOne({ _id: id });
     return categoryImage;
   }
 }

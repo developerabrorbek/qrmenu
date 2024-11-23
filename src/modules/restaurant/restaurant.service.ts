@@ -163,7 +163,7 @@ export class RestaurantService {
 
     await this.uploadService.removeFile({ fileName: restaurant.image });
 
-    await this.restaurantModel.deleteOne({ id });
+    await this.restaurantModel.deleteOne({ _id: id });
 
     return restaurant;
   }
