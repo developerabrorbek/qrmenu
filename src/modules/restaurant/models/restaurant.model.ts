@@ -17,7 +17,7 @@ export class Restaurant {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   user: string;
 
-  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Language' }] })
+  @Prop({ type: [{ type: SchemaTypes.ObjectId }], ref: 'Language' })
   languages: string[];
 }
 

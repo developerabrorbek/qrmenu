@@ -5,7 +5,7 @@
 
 # files
 /public/*
-!/public/*/
+!/public/static/
 
 
 # Logs

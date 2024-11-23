@@ -29,6 +29,7 @@ export class AuthService {
     return {
       success: true,
       access_token: accessToken,
+      role: foundedUser.role
     };
   }
 }

@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as QRCode from 'qrcode';
 import { Restaurant } from './models';
-import { CreateRestaurantDto,UpdateRestaurantDto } from './dto';
+import { CreateRestaurantDto, UpdateRestaurantDto } from './dto';
 import { User } from '../user';
 import { Language } from '../language';
 import { UploadService } from '../upload';
@@ -27,19 +27,26 @@ export class RestaurantService {
 
   async create(payload: CreateRestaurantDto) {
     await this.#_checkUser(payload.userId);
-    await this.#_checkLanguages(payload.languages);
+    const languages =
+      typeof payload.languages == 'string'
+        ? payload.languages.split(',')
+        : payload.languages;
+
+    await this.#_checkLanguages(languages);
 
     const restaurantImage = await this.uploadService.uploadFile({
       destination: 'public',
       file: payload.image,
     });
 
+    console.log('okkkkkk');
+
     const restaurant = await this.restaurantModel.create({
       image: restaurantImage.imageUrl,
       name: payload.name,
       description: payload.description,
       user: payload.userId,
-      languages: payload.languages,
+      languages: languages,
     });
 
     return restaurant;
@@ -108,7 +115,11 @@ export class RestaurantService {
     }
 
     if (payload.languages && payload.languages.length > 0) {
-      await this.#_checkLanguages(payload.languages);
+      await this.#_checkLanguages(
+        typeof payload.languages == 'string'
+          ? payload.languages.split(',')
+          : payload.languages,
+      );
 
       await this.restaurantModel.updateOne(
         { id },
@@ -166,7 +177,7 @@ export class RestaurantService {
   }
 
   async #_checkLanguages(payload: string[]) {
-    const languages = await this.languageModel.find({ id: { $in: payload } });
+    const languages = await this.languageModel.find({ _id: { $in: payload } });
     if (languages.length !== payload.length) {
       throw new NotFoundException('One or more languages not found');
     }

@@ -30,7 +30,7 @@ async function bootstrap() {
     .setDescription('The qrmenu API description')
     .setVersion('1.0')
     .addBearerAuth()
-    .addServer(`http://localhost:${config.get<number>('app.port')}`, config.get<string>('app.host'))
+    // .addServer(`http://localhost:${config.get<number>('app.port')}`, config.get<string>('app.host'))
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, swaggerConfig);

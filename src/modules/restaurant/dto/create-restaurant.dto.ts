@@ -1,6 +1,7 @@
 import { IsObjectId } from '@decorators';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsObject, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsArray, IsString } from 'class-validator';
 
 export class CreateRestaurantDto {
   @ApiProperty({
@@ -15,16 +16,16 @@ export class CreateRestaurantDto {
     required: false,
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
-  @IsObject()
-  description?: Record<string,string>;
+  @IsString()
+  description?: string;
 
   @ApiProperty({
     type: 'string',
     required: true,
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
-  @IsObject()
-  name: Record<string,string>;
+  @IsString()
+  name: string;
 
   @ApiProperty({
     type: 'string',
@@ -35,11 +36,13 @@ export class CreateRestaurantDto {
   userId: string;
 
   @ApiProperty({
-    type: 'array',
+    type: [String],
     required: true,
-    example: ['6740d72e5d8b643546bc700b', '6740d72e5d8b643546bc700c'],
   })
+  @Transform(({ value }) =>
+    typeof value == 'string' ? value.split(',') : value,
+  )
   @IsArray()
   @IsObjectId({ each: true })
-  languages: string[];
+  languages: string[] | string;
 }

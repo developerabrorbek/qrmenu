@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsObject } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCategorImageDto {
   @ApiProperty({
@@ -7,8 +7,8 @@ export class CreateCategorImageDto {
     required: true,
     example: `{uz: "1-taomlar",en: "1-meals"}`,
   })
-  @IsObject()
-  description: Record<string, string>;
+  @IsString()
+  description: string;
 
   @ApiProperty({
     type: String,

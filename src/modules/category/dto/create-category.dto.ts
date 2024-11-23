@@ -9,7 +9,7 @@ export class CreateCategoryDto {
     example: `{uz: "1-taomlar",en: "1-meals"}`,
   })
   @IsString()
-  name: Record<string, string>;
+  name: string;
 
   @ApiProperty({
     type: String,

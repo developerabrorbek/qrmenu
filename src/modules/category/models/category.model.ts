@@ -6,7 +6,7 @@ export type CategoryDocument = HydratedDocument<Category>;
 @Schema({ collection: 'categories', timestamps: true })
 export class Category {
   @Prop({ type: SchemaTypes.Mixed, required: true })
-  name: Record<string, string>;
+  name: string;
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Restaurant' })
   restaurant: string;
