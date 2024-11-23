@@ -1,6 +1,6 @@
 import { IsObjectId } from '@decorators';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsObject, IsString } from 'class-validator';
 
 export class CreateRestaurantDto {
   @ApiProperty({
@@ -15,16 +15,16 @@ export class CreateRestaurantDto {
     required: false,
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
-  @IsString()
-  description?: string;
+  @IsObject()
+  description?: Record<string,string>;
 
   @ApiProperty({
     type: 'string',
     required: true,
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
-  @IsString()
-  name: string;
+  @IsObject()
+  name: Record<string,string>;
 
   @ApiProperty({
     type: 'string',

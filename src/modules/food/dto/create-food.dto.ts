@@ -9,7 +9,7 @@ export class CreateFoodDto {
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
   @IsString()
-  name: string;
+  name: Record<string,string>;
 
   @ApiProperty({
     type: 'string',
@@ -17,7 +17,7 @@ export class CreateFoodDto {
     example: '{uz: "1-taomlar",en: "1-meals"}',
   })
   @IsString()
-  description: string;
+  description: Record<string,string>;
 
   @ApiProperty({
     type: 'number',

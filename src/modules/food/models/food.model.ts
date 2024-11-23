@@ -5,11 +5,11 @@ export type FoodDocument = HydratedDocument<Food>;
 
 @Schema({ collection: 'foods', timestamps: true })
 export class Food {
-  @Prop({ type: SchemaTypes.String, required: true })
-  name: string;
+  @Prop({ type: SchemaTypes.Mixed, required: true })
+  name: Record<string,string>;
 
-  @Prop({ type: SchemaTypes.String, required: true })
-  description: string;
+  @Prop({ type: SchemaTypes.Mixed, required: true })
+  description: Record<string,string>;
 
   @Prop({ type: SchemaTypes.Number, required: true })
   price: number;
