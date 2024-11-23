@@ -6,6 +6,8 @@ import { Restaurant, RestaurantSchema } from './models';
 import { Language, LanguageSchema } from '../language';
 import { User, UserSchema } from '../user';
 import { UploadService } from '../upload';
+import { Food, FoodSchema } from '../food';
+import { Category, CategorySchema } from '../category';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { UploadService } from '../upload';
       { name: Restaurant.name, schema: RestaurantSchema },
       { name: Language.name, schema: LanguageSchema },
       { name: User.name, schema: UserSchema },
+      { name: Food.name, schema: FoodSchema },
+      { name: Category.name, schema: CategorySchema },
     ]),
   ],
   controllers: [RestaurantController],

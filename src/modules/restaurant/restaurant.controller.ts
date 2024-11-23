@@ -41,8 +41,9 @@ export class RestaurantController {
     return this.restaurantService.create({ ...createRestaurantDto, image });
   }
 
-  @Protected(false)
-  @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.USER])
+  @ApiBearerAuth()
+  @Protected(true)
+  @Roles([UserRoles.SUPER_ADMIN])
   @ApiOperation({ summary: 'Barcha restoranlarni olish' })
   @Get()
   findAll() {

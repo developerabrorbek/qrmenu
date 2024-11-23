@@ -7,6 +7,8 @@ import { Model } from 'mongoose';
 import { User } from '../user';
 import { Language } from '../language';
 import { UploadService } from '../upload';
+import { Food } from '../food';
+import { Category } from '../category';
 
 @Injectable()
 export class RestaurantService {
@@ -14,6 +16,8 @@ export class RestaurantService {
     @InjectModel(Restaurant.name) private restaurantModel: Model<Restaurant>,
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Language.name) private languageModel: Model<Language>,
+    @InjectModel(Food.name) private foodModel: Model<Food>,
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
     private uploadService: UploadService,
   ) {}
 
@@ -40,15 +44,45 @@ export class RestaurantService {
   async findAll() {
     const restaurants = await this.restaurantModel
       .find()
-      .populate(['user', 'languages']);
-    return restaurants;
+      .populate(['user', 'languages'])
+      .lean();
+
+    const response = [];
+
+    for (const restaurant of restaurants) {
+      const categoriesResponse = [];
+
+      const categories = await this.categoryModel
+        .find({ restaurant: restaurant._id })
+        .lean();
+
+      for (const category of categories) {
+        const foods = await this.foodModel.find({ category: category._id });
+        categoriesResponse.push({ ...category, foods: foods });
+      }
+
+      response.push({ ...restaurant, categories: categoriesResponse });
+    }
+    return response;
   }
 
   async findOne(id: string) {
     const restaurant = await this.restaurantModel
       .findById(id)
-      .populate(['user', 'languages']);
-    return restaurant;
+      .populate(['user', 'languages'])
+      .lean();
+    const categoriesResponse = [];
+
+    const categories = await this.categoryModel
+      .find({ restaurant: restaurant._id })
+      .lean();
+
+    for (const category of categories) {
+      const foods = await this.foodModel.find({ category: category._id });
+      categoriesResponse.push({ ...category, foods: foods });
+    }
+
+    return { ...restaurant, categories: categoriesResponse };
   }
 
   async update(id: string, payload: UpdateRestaurantDto) {
