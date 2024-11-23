@@ -15,7 +15,7 @@ export class LanguageService {
 
   async create(payload: CreateLanguageDto) {
     const image = await this.uploadService.uploadFile({
-      destination: 'public',
+      destination: 'public/static',
       file: payload.image,
     });
 
@@ -37,8 +37,33 @@ export class LanguageService {
     return language;
   }
 
-  update(id: string, updateLanguageDto: UpdateLanguageDto) {
-    return `This action updates a #${id} language`;
+  async update(id: string, payload: UpdateLanguageDto) {
+    const language = await this.languageModel.findById(id);
+
+    if (!language) {
+      throw new NotFoundException('Language not found');
+    }
+
+    if (payload?.image) {
+      if (language.image) {
+        await this.uploadService.removeFile({
+          fileName: language.image,
+        });
+      }
+
+      const image = await this.uploadService.uploadFile({
+        destination: 'public/static',
+        file: payload.image,
+      });
+
+      await this.languageModel.updateOne({ id }, { image: image.imageUrl });
+    }
+
+    const newLanguage = await this.languageModel.updateOne(
+      { id },
+      { name: payload.name },
+    );
+    return newLanguage;
   }
 
   async remove(id: string) {
