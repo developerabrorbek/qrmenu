@@ -14,6 +14,12 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    optionsSuccessStatus: 200,
+    origin: '*',
+  });
+
   const seeds = app.get(SeedsService);
   await seeds.seedAll();
 
