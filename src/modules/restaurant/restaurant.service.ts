@@ -1,9 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
-import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Restaurant } from './models';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import * as QRCode from 'qrcode';
+import { Restaurant } from './models';
+import { CreateRestaurantDto,UpdateRestaurantDto } from './dto';
 import { User } from '../user';
 import { Language } from '../language';
 import { UploadService } from '../upload';
@@ -83,6 +87,17 @@ export class RestaurantService {
     }
 
     return { ...restaurant, categories: categoriesResponse };
+  }
+
+  async generateQRcode(link: string) {
+    try {
+      // Generate a QR code and return it as a data URL (base64)
+      return await QRCode.toDataURL(link);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to generate QR code: ' + error.message,
+      );
+    }
   }
 
   async update(id: string, payload: UpdateRestaurantDto) {

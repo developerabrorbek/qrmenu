@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -34,11 +35,14 @@ export class RestaurantController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
   @Post()
-  create(
+  async create(
     @Body() createRestaurantDto: CreateRestaurantDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    return this.restaurantService.create({ ...createRestaurantDto, image });
+    return await this.restaurantService.create({
+      ...createRestaurantDto,
+      image,
+    });
   }
 
   @ApiBearerAuth()
@@ -46,16 +50,25 @@ export class RestaurantController {
   @Roles([UserRoles.SUPER_ADMIN])
   @ApiOperation({ summary: 'Barcha restoranlarni olish' })
   @Get()
-  findAll() {
-    return this.restaurantService.findAll();
+  async findAll() {
+    return await this.restaurantService.findAll();
   }
 
   @Protected(false)
   @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.USER])
   @ApiOperation({ summary: 'Bitta restoranni olish' })
-  @Get(':id')
+  @Get('/one/:id')
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.restaurantService.findOne(id);
+  }
+
+  @ApiBearerAuth()
+  @Protected(true)
+  @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN])
+  @ApiOperation({ summary: 'QRcode generatsiya qilish (restoran uchun)' })
+  @Get('/generate/qrcode')
+  async generateQRcode(@Query('link') link: string) {
+    return await this.restaurantService.generateQRcode(link);
   }
 
   @ApiBearerAuth()
