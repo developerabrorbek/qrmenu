@@ -39,9 +39,7 @@ export class CreateRestaurantDto {
     type: [String],
     required: true,
   })
-  @Transform(({ value }) =>
-    typeof value == 'string' ? value.split(',') : value,
-  )
+  @Transform(({ value }) => JSON.parse(value))
   @IsArray()
   @IsObjectId({ each: true })
   languages: string[] | string;
