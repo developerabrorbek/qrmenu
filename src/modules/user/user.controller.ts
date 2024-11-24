@@ -56,7 +56,7 @@ export class UserController {
   @Protected(true)
   @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN])
   @ApiOperation({ summary: 'Bitta foydalanuvchini olish' })
-  @Get(':id')
+  @Get('/single/:id')
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.userService.findOne(id);
   }
