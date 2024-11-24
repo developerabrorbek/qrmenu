@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -21,6 +22,7 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 import { Protected, Roles } from '@decorators';
 import { UserRoles } from './models';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RequestInterface } from '@guards';
 
 @ApiTags('Users')
 @Controller('user')
@@ -57,6 +59,15 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.userService.findOne(id);
+  }
+
+  @ApiBearerAuth()
+  @Protected(true)
+  @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.USER])
+  @ApiOperation({ summary: "Foydalanuvchining ma'lumotlarini olish" })
+  @Get('me')
+  async me(@Req() request: RequestInterface) {
+    return await this.userService.findOne(request.userId);
   }
 
   @ApiBearerAuth()

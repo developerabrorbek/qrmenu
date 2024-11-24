@@ -52,6 +52,12 @@ export class UserService {
     return { user, restaurant };
   }
 
+  async me(id: string) {
+    const user = await this.userModel.findById(id);
+    const restaurant = await this.restaurantModel.findOne({ user: user.id });
+    return { user, restaurant };
+  }
+
   async update(id: string, payload: UpdateUserDto) {
     const user = await this.userModel.findById(id);
 

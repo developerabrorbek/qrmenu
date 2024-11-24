@@ -15,7 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserRoles } from '@modules';
 
 export declare interface RequestInterface extends Request {
-  userId: number | undefined;
+  userId: string | undefined;
   role: string | undefined
 }
 
