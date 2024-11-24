@@ -67,7 +67,7 @@ export class UserController {
   @ApiOperation({ summary: "Foydalanuvchining ma'lumotlarini olish" })
   @Get('me')
   async me(@Req() request: RequestInterface) {
-    return await this.userService.findOne(request.userId);
+    return await this.userService.me(request.userId);
   }
 
   @ApiBearerAuth()

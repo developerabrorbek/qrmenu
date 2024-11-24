@@ -54,7 +54,9 @@ export class UserService {
 
   async me(id: string) {
     const user = await this.userModel.findById(id);
-    const restaurant = await this.restaurantModel.findOne({ user: user.id });
+    const restaurant = await this.restaurantModel
+      .findOne({ user: user.id })
+      .populate(['languages', 'user']);
     return { user, restaurant };
   }
 
