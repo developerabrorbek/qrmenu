@@ -19,7 +19,7 @@ export class AuthService {
       password: payload.password,
     });
 
-    const restaurant = await this.restaurantModel.findOne({ user: foundedUser.id });
+    const restaurant = await this.restaurantModel.findOne({ user: foundedUser.id }).populate(["languages", "user"]);
 
     if (!foundedUser) {
       throw new NotFoundException('User not found');
