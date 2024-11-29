@@ -1,7 +1,7 @@
 import { IsObjectId } from '@decorators';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsObject, IsOptional } from 'class-validator';
 
 export class CreateRestaurantDto {
   @ApiProperty({
@@ -12,20 +12,39 @@ export class CreateRestaurantDto {
   image: Express.Multer.File;
 
   @ApiProperty({
-    type: 'string',
-    required: false,
-    example: '{uz: "1-taomlar",en: "1-meals"}',
+    type: 'object',
+    properties: {
+      uz: {
+        type: 'string',
+      },
+      ru: {
+        type: 'string',
+      },
+    },
   })
-  @IsString()
-  description?: string;
+  @Transform(({ value }) => {
+    if(value?.length) {
+      return JSON.parse(value)
+    }
+  })
+  @IsOptional()
+  @IsObject()
+  description?: Record<string, string> | null;
 
   @ApiProperty({
-    type: 'string',
-    required: true,
-    example: '{uz: "1-taomlar",en: "1-meals"}',
+    type: 'object',
+    properties: {
+      uz: {
+        type: 'string',
+      },
+      ru: {
+        type: 'string',
+      },
+    },
   })
-  @IsString()
-  name: string;
+  @Transform(({ value }) => JSON.parse(value))
+  @IsObject()
+  name: Record<string, string>;
 
   @ApiProperty({
     type: 'string',
@@ -36,11 +55,16 @@ export class CreateRestaurantDto {
   userId: string;
 
   @ApiProperty({
+    description: "Array of language id's",
     type: [String],
-    required: true,
+    example: ['tag1', 'tag2'],
   })
-  @Transform(({ value }) => JSON.parse(value))
+  @Transform(({ value }) => {
+    if (value.includes('[')) return JSON.parse(value);
+
+    if (value.includes(',')) return value.split(',');
+  })
   @IsArray()
   @IsObjectId({ each: true })
-  languages: string[] | string;
+  languages: string[];
 }

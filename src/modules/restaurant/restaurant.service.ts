@@ -27,26 +27,20 @@ export class RestaurantService {
 
   async create(payload: CreateRestaurantDto) {
     await this.#_checkUser(payload.userId);
-    const languages =
-      typeof payload.languages == 'string'
-        ? payload.languages.split(',')
-        : payload.languages;
 
-    await this.#_checkLanguages(languages);
+    await this.#_checkLanguages(payload.languages);
 
     const restaurantImage = await this.uploadService.uploadFile({
       destination: 'public',
       file: payload.image,
     });
 
-    console.log('okkkkkk');
-
     const restaurant = await this.restaurantModel.create({
       image: restaurantImage.imageUrl,
       name: payload.name,
       description: payload.description,
       user: payload.userId,
-      languages: languages,
+      languages: payload.languages,
     });
 
     return restaurant;
@@ -115,11 +109,7 @@ export class RestaurantService {
     }
 
     if (payload.languages && payload.languages.length > 0) {
-      await this.#_checkLanguages(
-        typeof payload.languages == 'string'
-          ? payload.languages.split(',')
-          : payload.languages,
-      );
+      await this.#_checkLanguages(payload.languages);
 
       await this.restaurantModel.updateOne(
         { id },

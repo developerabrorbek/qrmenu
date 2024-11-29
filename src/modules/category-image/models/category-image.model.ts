@@ -6,7 +6,7 @@ export type CategoryImageDocument = HydratedDocument<CategoryImage>;
 @Schema({ collection: 'category_images', timestamps: true })
 export class CategoryImage {
   @Prop({ type: SchemaTypes.Mixed, required: true })
-  description: string;
+  description: Record<string, string>;
 
   @Prop({ type: SchemaTypes.String })
   image: string;

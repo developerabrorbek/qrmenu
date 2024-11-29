@@ -1,23 +1,38 @@
-import { IsNumberString, IsString } from 'class-validator';
+import { IsNumberString, IsObject, IsString } from 'class-validator';
 import { IsObjectId } from '@decorators';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateFoodDto {
   @ApiProperty({
-    type: 'string',
-    required: true,
-    example: '{uz: "1-taomlar",en: "1-meals"}',
+    type: 'object',
+    properties: {
+      uz: {
+        type: 'string',
+      },
+      ru: {
+        type: 'string',
+      },
+    },
   })
-  @IsString()
-  name: string;
+  @Transform(({ value }) => JSON.parse(value))
+  @IsObject()
+  name: Record<string, string>;
 
   @ApiProperty({
-    type: 'string',
-    required: true,
-    example: '{uz: "1-taomlar",en: "1-meals"}',
+    type: 'object',
+    properties: {
+      uz: {
+        type: 'string',
+      },
+      ru: {
+        type: 'string',
+      },
+    },
   })
-  @IsString()
-  description: string;
+  @Transform(({ value }) => JSON.parse(value))
+  @IsObject()
+  description: Record<string, string>;
 
   @ApiProperty({
     type: 'number',
