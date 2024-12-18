@@ -112,7 +112,7 @@ export class RestaurantService {
       await this.#_checkLanguages(payload.languages);
 
       await this.restaurantModel.updateOne(
-        { id },
+        { _id:id },
         {
           languages: payload.languages,
         },
@@ -127,7 +127,7 @@ export class RestaurantService {
         file: payload.image,
       });
       await this.restaurantModel.updateOne(
-        { id },
+        { _id: id },
         {
           image: restaurantImage.imageUrl,
         },
@@ -135,7 +135,7 @@ export class RestaurantService {
     }
 
     await this.restaurantModel.updateOne(
-      { id },
+      { _id: id },
       {
         name: payload.name,
         description: payload.description,

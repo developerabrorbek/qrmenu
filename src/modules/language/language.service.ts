@@ -56,11 +56,11 @@ export class LanguageService {
         file: payload.image,
       });
 
-      await this.languageModel.updateOne({ id }, { image: image.imageUrl });
+      await this.languageModel.updateOne({ _id: id }, { image: image.imageUrl });
     }
 
     const newLanguage = await this.languageModel.updateOne(
-      { id },
+      { _id:id },
       { name: payload.name },
     );
     return newLanguage;

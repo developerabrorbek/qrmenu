@@ -48,7 +48,7 @@ export class CategoryService {
       await this.#_checkCategoryImage(payload.image);
     }
     const category = await this.categoryModel.updateOne(
-      { id },
+      { _id: id },
       { image: payload.image, name: payload.name },
     );
     return category;

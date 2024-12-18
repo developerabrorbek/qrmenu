@@ -80,7 +80,7 @@ export class UserService {
       });
 
       return await this.userModel.updateOne(
-        { id },
+        { _id: id },
         {
           name: payload.name,
           phone: payload.phone,
@@ -92,7 +92,7 @@ export class UserService {
     }
 
     const newUser = await this.userModel.updateOne(
-      { id },
+      { _id: id },
       {
         name: payload?.name,
         phone: payload?.phone,

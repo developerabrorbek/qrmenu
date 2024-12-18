@@ -50,21 +50,22 @@ export class CategoryImageService {
         await this.uploadService.removeFile({
           fileName: categoryImage.image,
         });
-
-        const image = await this.uploadService.uploadFile({
-          destination: 'public/category-image',
-          file: payload.image,
-        });
-
-        await this.categoryImageModel.updateOne(
-          { id },
-          { image: image.imageUrl },
-        );
       }
+
+      const image = await this.uploadService.uploadFile({
+        destination: 'public/category-image',
+        file: payload.image,
+      });
+
+      const updatedImage = await this.categoryImageModel.updateOne(
+        { _id: id },
+        { image: image.imageUrl },
+      );
+      console.log(updatedImage, id)
     }
 
     return await this.categoryImageModel.updateOne(
-      { id },
+      { _id: id },
       { description: payload?.description },
     );
   }

@@ -65,11 +65,11 @@ export class FoodService {
         file: payload.image,
       });
 
-      await this.foodModel.updateOne({ id }, { image: image.imageUrl });
+      await this.foodModel.updateOne({ _id: id }, { image: image.imageUrl });
     }
 
     const newFood = await this.foodModel.updateOne(
-      { id },
+      { _id:id },
       {
         name: payload.name,
         description: payload.description,
