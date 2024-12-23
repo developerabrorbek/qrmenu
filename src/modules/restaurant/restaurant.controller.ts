@@ -26,7 +26,7 @@ import { UserRoles } from '../user';
 @ApiTags('Restaurant')
 @Controller({
   path: 'restaurant',
-  version: ["2"],
+  version: ["1"],
 })
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}

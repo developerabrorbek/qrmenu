@@ -5,7 +5,7 @@ import { ApiOperation } from '@nestjs/swagger';
 
 @Controller({
   path: 'auth',
-  version: ["2"],
+  version: ["1"],
 })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

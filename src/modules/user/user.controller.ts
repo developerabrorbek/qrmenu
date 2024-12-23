@@ -27,7 +27,7 @@ import { RequestInterface } from '@guards';
 @ApiTags('Users')
 @Controller({
   path: 'user',
-  version: ["2"],
+  version: ["1"],
 })
 export class UserController {
   constructor(private readonly userService: UserService) {}

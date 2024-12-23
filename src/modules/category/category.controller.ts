@@ -21,7 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('Category')
 @Controller({
   path: 'category',
-  version: ["2"],
+  version: ["1"],
 })
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}

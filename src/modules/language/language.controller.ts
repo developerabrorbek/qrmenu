@@ -25,7 +25,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @ApiTags('Language')
 @Controller({
   path: 'language',
-  version: ["2"],
+  version: ["1"],
 })
 export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
