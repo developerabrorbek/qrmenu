@@ -21,7 +21,10 @@ import { Protected, Roles } from '@decorators';
 import { UserRoles } from '../user';
 
 @ApiTags('Upload')
-@Controller('uploads')
+@Controller({
+  path: 'uploads',
+  version: ["2"],
+})
 export class UploadController {
   constructor(private service: UploadService) {}
 

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SeedsService } from '@modules';
 import { AppModule } from './app.module';
@@ -10,7 +10,12 @@ async function bootstrap() {
     // logger: false,
   });
 
-  app.setGlobalPrefix('/api/v1');
+  app.setGlobalPrefix('/api');
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: "2",
+  })
 
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -31,7 +36,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('QRmenu')
     .setDescription('The qrmenu API description')
-    .setVersion('1.0')
+    .setVersion('2')
     .addBearerAuth()
     // .addServer(`http://localhost:${config.get<number>('app.port')}`, config.get<string>('app.host'))
     .build();

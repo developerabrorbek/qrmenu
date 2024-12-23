@@ -24,7 +24,10 @@ import { CreateRestaurantDto, UpdateRestaurantDto } from './dto';
 import { UserRoles } from '../user';
 
 @ApiTags('Restaurant')
-@Controller('restaurant')
+@Controller({
+  path: 'restaurant',
+  version: ["2"],
+})
 export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}
 

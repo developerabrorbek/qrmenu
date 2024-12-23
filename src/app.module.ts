@@ -17,7 +17,6 @@ import {
   LanguageModule,
   SeedsModule,
   UploadModule,
-  CategoryImageModule,
 } from '@modules';
 
 @Module({
@@ -55,7 +54,6 @@ import {
     LanguageModule,
     SeedsModule,
     UploadModule,
-    CategoryImageModule,
   ],
   providers: [
     {

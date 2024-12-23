@@ -21,10 +21,10 @@ export class CreateCategoryDto {
 
   @ApiProperty({
     type: String,
+    format: "binary",
     required: true,
   })
-  @IsString()
-  image: string;
+  image: any;
 
   @ApiProperty({
     type: String,

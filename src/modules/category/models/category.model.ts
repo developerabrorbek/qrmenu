@@ -11,7 +11,7 @@ export class Category {
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Restaurant' })
   restaurant: string;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: "CategoryImage" })
+  @Prop({ type: SchemaTypes.String })
   image: string;
 
   @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Food' }] })

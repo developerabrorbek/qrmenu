@@ -23,7 +23,10 @@ import { CreateFoodDto, UpdateFoodDto } from './dto';
 import { UserRoles } from '../user';
 
 @ApiTags('Foods')
-@Controller('food')
+@Controller({
+  path: 'food',
+  version: ["2"],
+})
 export class FoodController {
   constructor(private readonly foodService: FoodService) {}
 

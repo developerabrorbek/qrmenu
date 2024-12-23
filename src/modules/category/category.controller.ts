@@ -6,27 +6,35 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ParseObjectIdPipe } from '@pipes';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Protected, Roles } from '@decorators';
 import { UserRoles } from '../user';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Category')
-@Controller('category')
+@Controller({
+  path: 'category',
+  version: ["2"],
+})
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @ApiBearerAuth()
   @Protected(true)
   @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN])
+  @ApiConsumes("multipart/form-data")
   @ApiOperation({ summary: 'Yangi kategoriya yaratish' })
+  @UseInterceptors(FileInterceptor("image"))
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+  create(@Body() createCategoryDto: CreateCategoryDto, @UploadedFile() image: Express.Multer.File) {
+    return this.categoryService.create({...createCategoryDto, image});
   }
 
   @Protected(false)
@@ -51,12 +59,15 @@ export class CategoryController {
   @Protected(true)
   @Roles([UserRoles.SUPER_ADMIN, UserRoles.ADMIN])
   @ApiOperation({ summary: 'Kategoriyani tahrirlash' })
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(FileInterceptor("image"))
   @Patch(':id')
   update(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile() image: Express.Multer.File
   ) {
-    return this.categoryService.update(id, updateCategoryDto);
+    return this.categoryService.update(id, {...updateCategoryDto, image });
   }
 
   @ApiBearerAuth()

@@ -1,27 +1,29 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 import { Category } from './models';
 import { Restaurant } from '../restaurant';
-import { CategoryImage } from '../category-image';
+import { UploadService } from '../upload';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<Category>,
     @InjectModel(Restaurant.name) private restaurantModel: Model<Restaurant>,
-    @InjectModel(CategoryImage.name)
-    private categoryImageModel: Model<CategoryImage>,
+    private uploadService: UploadService,
   ) {}
 
   async create(payload: CreateCategoryDto) {
     await this.#_checkRestaurant(payload.restaurantId);
-    await this.#_checkCategoryImage(payload.image);
+
+    const newCategoryImage = await this.uploadService.uploadFile({
+      file: payload.image,
+      destination: 'public/category-image',
+    });
 
     const category = await this.categoryModel.create({
-      image: payload.image,
+      image: newCategoryImage.imageUrl,
       name: payload.name,
       restaurant: payload.restaurantId,
     });
@@ -32,20 +34,31 @@ export class CategoryService {
   async findAll(restaurantId: string) {
     const categories = await this.categoryModel
       .find({ restaurant: restaurantId })
-      .populate(['foods', 'image']);
+      .populate(['foods']);
+
     return categories;
   }
 
   async findOne(id: string) {
-    const category = await this.categoryModel
-      .findById(id)
-      .populate(['foods', 'image']);
+    const category = await this.categoryModel.findById(id).populate(['foods']);
     return category;
   }
 
   async update(id: string, payload: UpdateCategoryDto) {
     if (payload?.image) {
-      await this.#_checkCategoryImage(payload.image);
+      const category = await this.categoryModel.findById(id);
+
+      if (category.image) {
+        await this.uploadService.removeFile({
+          fileName: category.image,
+        });
+      }
+      // await this.#_checkCategoryImage(payload.image);
+      const newCategoryImage = await this.uploadService.uploadFile({
+        file: payload.image,
+        destination: 'public/category-image',
+      });
+      payload.image = newCategoryImage.imageUrl;
     }
     const category = await this.categoryModel.updateOne(
       { _id: id },
@@ -55,7 +68,19 @@ export class CategoryService {
   }
 
   async remove(id: string) {
-    const category = await this.categoryModel.deleteOne({ _id: id });
+    const category = await this.categoryModel.findById(id);
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    if (category.image) {
+      await this.uploadService.removeFile({
+        fileName: category.image,
+      });
+    }
+
+    await this.categoryModel.deleteOne({ _id: id });
     return category;
   }
 
@@ -63,13 +88,6 @@ export class CategoryService {
     const restaurant = await this.restaurantModel.findById(id);
     if (!restaurant) {
       throw new NotFoundException('Restaurant not found');
-    }
-  }
-
-  async #_checkCategoryImage(id: string) {
-    const categoryImage = await this.categoryImageModel.findById(id);
-    if (!categoryImage) {
-      throw new NotFoundException('Category Image not found');
     }
   }
 }

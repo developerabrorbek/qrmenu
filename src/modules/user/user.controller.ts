@@ -25,7 +25,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { RequestInterface } from '@guards';
 
 @ApiTags('Users')
-@Controller('user')
+@Controller({
+  path: 'user',
+  version: ["2"],
+})
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

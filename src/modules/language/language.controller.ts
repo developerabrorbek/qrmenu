@@ -23,7 +23,10 @@ import { UserRoles } from '../user';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Language')
-@Controller('language')
+@Controller({
+  path: 'language',
+  version: ["2"],
+})
 export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 

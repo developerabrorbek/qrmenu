@@ -1,9 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, VERSION_NEUTRAL } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginForAdminDto } from './dto';
 import { ApiOperation } from '@nestjs/swagger';
 
-@Controller('auth')
+@Controller({
+  path: 'auth',
+  version: ["2"],
+})
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
